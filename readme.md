@@ -1,9 +1,10 @@
 Greetings
 
-Beryl deliver your PE (exe) straight to the victim in form of a game or a no gui 
+Beryl delivers your PE (exe) straight to the victim in form of a game or a no gui 
 
 DISCLAIMER :
-ME The author takes NO responsibility and/or liability for how you choose to use any of the tools/source code/any files provided. ME The author and anyone affiliated with will not be liable for any losses and/or damages in connection with use of Beryl. By using Stitch or any files included, you understand that you are AGREEING TO USE AT YOUR OWN RISK. Once again Beryl is for EDUCATION and/or RESEARCH purposes ONLY.
+
+ME The author takes NO responsibility and/or liability for how you choose to use any of the tools/source code/any files provided. ME The author and anyone affiliated with will not be liable for any losses and/or damages in connection with use of Beryl. By using Beryl or any files included, you understand that you are AGREEING TO USE AT YOUR OWN RISK. Once again Beryl is for EDUCATION and/or RESEARCH purposes ONLY.
 
 victim only has to run the generated file wich execute as UA by default
 
