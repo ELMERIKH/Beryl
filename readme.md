@@ -15,10 +15,13 @@ ps: you need a valid link to install and your PE on the victim machine
 
 usage: beryl.py [-h] 
 
--d DIRECTORY_PATH 
--url URL 
+-d DIRECTORY_PATH (in the HOME env of the user)
+
+-url URL (url to install your PE)
+
 -n OUTPUT_NAME 
-[-g {Snake,FlapyBird,Turtle,RaceCar}]
+
+[-g {Snake,FlapyBird,Turtle,RaceCar}] (GUI)
 
 
 To Do :
