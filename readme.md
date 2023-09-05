@@ -13,6 +13,9 @@ if user doesn t execute as admin programme won't run
 ps: you need a valid link to install and your PE on the victim machine
     also if your PE should at least use some evasion techniques 
     you can use tools like Scarecrow ,Myph,Veil .... ;)
+Setup:
+
+pip install requirements.txt
 
 usage: beryl.py [-h] 
 
