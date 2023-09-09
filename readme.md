@@ -18,7 +18,9 @@ ps: you need a valid link to install your PE on the victim machine
 
 Setup:
 
-pip install requirements.txt
+pip install -r requirements.txt 
+
+Python3 Beryl.py
 
 usage: beryl.py [-h] 
 
@@ -34,6 +36,7 @@ usage: beryl.py [-h]
 To Do :
 
 add dll PE support
+
 add obfuscation 
 
 ![Alt text](<2023-08-31 09_57_39-Command Prompt.png>)
