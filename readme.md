@@ -1,6 +1,6 @@
 Greetings
 
-Beryl delivers your PE (exe) straight to the victim in form of a game or a no gui 
+Beryl delivers your PE (exe or dll) straight to the victim in form of a game or a no gui 
 
 DISCLAIMER :
 
@@ -32,11 +32,10 @@ usage: beryl.py [-h]
 
 [-g {Snake,FlapyBird,Turtle,RaceCar}] (GUI)
 
+-dll function (name of function to run with the dll file)
 
 To Do :
 
-add dll PE support
-
-add obfuscation 
+add some obfuscation 
 
 ![Alt text](<2023-08-31 09_57_39-Command Prompt.png>)
