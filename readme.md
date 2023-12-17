@@ -13,8 +13,8 @@ if user doesn t execute as admin programme won't run
 added persistance (payload starts every time at start up)
 
 ps: you need a valid link to install your PE on the victim machine
-    also if your PE should at least use some evasion techniques 
-    you can use tools like Scarecrow ,Myph,Veil .... ;)
+    also your PE should at least use some evasion techniques 
+    you can use tools like Scarecrow ,Myph,Veil .... to compile your payload (shellcode or bin) into a PE  ;)
 
 Setup:
 
