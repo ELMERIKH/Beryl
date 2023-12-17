@@ -39,6 +39,7 @@ def create_exe(py_file, game_type):
     "--copyright=COPYRIGHT@Beryl",
     "--trademarks=Death is just a long slumber",
     f"--windows-icon-from-ico={icon_file}",
+    "--windows-uac-admin",
     "--standalone",
     "--remove-output",
     f"--output-dir=Output",
