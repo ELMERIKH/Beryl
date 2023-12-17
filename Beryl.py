@@ -5,7 +5,7 @@ from colorama import Fore, Style
 import argparse
 import subprocess
 import sys
-
+import platform
 
 def display_ansi_art(file_path):
     with open(file_path, 'r', encoding='latin-1') as file:
@@ -30,8 +30,9 @@ def create_exe(py_file, game_type):
             icon_file = os.path.join(icons_directory, 'turtle.ico')
             name = "Turtle"
 
+        python_executable = "python" if is_windows else "python3"
         pyinstaller_command = [
-             "python3", "-m", "nuitka",
+        python_executable, "-m", "nuitka",
     "--onefile",
     "--company-name=Beryl",
     "--file-version=1.2",
