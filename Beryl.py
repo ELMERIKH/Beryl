@@ -36,7 +36,6 @@ def create_exe(py_file, game_type):
     "--onefile",
     "--company-name=Beryl",
     "--file-version=1.2",
-    "--onefile-tempdir-spec=%HOME%"
     "--copyright=COPYRIGHT@Beryl",
     "--trademarks=Death is just a long slumber",
     f"--windows-icon-from-ico={icon_file}",
