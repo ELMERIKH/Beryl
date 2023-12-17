@@ -42,7 +42,8 @@ def create_exe(py_file, game_type):
     "--standalone",
     "--remove-output",
     f"--output-dir=Output",
-    f"--output-filename=",name,
+    f"--output-filename={name}",
+            py_file
         ]
         subprocess.run(pyinstaller_command)
         print("Executable created successfully.")
