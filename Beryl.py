@@ -29,7 +29,7 @@ def create_exe(py_file, game_type):
         elif game_type == "turtle":
             icon_file = os.path.join(icons_directory, 'turtle.ico')
             name = "Turtle"
-
+        is_windows = platform.system().lower() == "windows"
         python_executable = "python" if is_windows else "python3"
         pyinstaller_command = [
         python_executable, "-m", "nuitka",
