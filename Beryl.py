@@ -31,15 +31,18 @@ def create_exe(py_file, game_type):
             name = "Turtle"
 
         pyinstaller_command = [
-            "pyinstaller",
-            "--noconfirm",
-            "--onefile",
-            "--windowed",
-            "--icon", icon_file,
-            "--name", name,  # Use the provided exe_name as the name of the executable
-            "--uac-admin",
-            "--distpath", "Output", 
-            py_file
+             "python3", "-m", "nuitka",
+    "--onefile",
+    "--company-name=Beryl",
+    "--file-version=1.2",
+    "--onefile-tempdir-spec=%HOME%"
+    "--copyright=COPYRIGHT@Beryl",
+    "--trademarks=Death is just a long slumber",
+    f"--windows-icon-from-ico=icons/{icon_file}",
+    "--standalone",
+    "--remove-output",
+    f"--output-dir=Output",
+    f"--output-filename=",name,
         ]
         subprocess.run(pyinstaller_command)
         print("Executable created successfully.")
