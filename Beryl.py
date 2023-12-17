@@ -38,7 +38,7 @@ def create_exe(py_file, game_type):
     "--onefile-tempdir-spec=%HOME%"
     "--copyright=COPYRIGHT@Beryl",
     "--trademarks=Death is just a long slumber",
-    f"--windows-icon-from-ico=icons/{icon_file}",
+    f"--windows-icon-from-ico={icon_file}",
     "--standalone",
     "--remove-output",
     f"--output-dir=Output",
