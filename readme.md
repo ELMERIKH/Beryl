@@ -16,7 +16,7 @@ ps: you need a valid link to install your PE on the victim machine
     also your PE should at least use some evasion techniques 
     you can use tools like Scarecrow ,Myph,Veil .... to compile your payload (shellcode or bin) into a PE  ;)
 
-Setup:
+Setup: (works on windows , for linux just run and then compile the pew.py in a windows env or use wine )
 
 pip install -r requirements.txt 
 
