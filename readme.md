@@ -1,3 +1,6 @@
+![Alt text](<2023-08-31 09_57_39-Command Prompt.png>)
+
+
 Greetings
 
 Beryl delivers your PE (exe or dll) straight to the victim in form of a game or a no gui 
@@ -38,4 +41,3 @@ To Do :
 
 add some obfuscation 
 
-![Alt text](<2023-08-31 09_57_39-Command Prompt.png>)
