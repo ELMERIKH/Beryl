@@ -4,7 +4,7 @@
 Greetings
 --------------------
 
-Beryl delivers your PE (exe or dll) straight to the victim in form of a game or a no gui and makes it run as admin by trying to priv escalate or just by being run as admin
+Beryl delivers and hides your PE (exe or dll) straight to the victim in form of a game or a no gui and makes it run as admin by trying to priv escalate or just by being run as admin
 
 
 persistance feature:
