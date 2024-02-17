@@ -11,7 +11,7 @@ persistance feature:
 ---------------------
 it use the task scheduler to create a task "User_Feed_ESRV" that runs the PE run at logon ,also the PE will run with the highest privilege available at each startup(SYSTEM or Nt/AUthority System)
 
-ps: tried this with an AgentTesla trojan PE and it worked fine
+ps: tried this with an AgentTesla trojan PE and it worked fine ;)
 
 tested on windows 10 and 11 fully bypass windows defender
 
