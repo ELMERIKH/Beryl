@@ -14,7 +14,7 @@ it use the task schedualer to make a the PE run at logon ,also the PE will run w
 
 ps: tried this with an AgentTesla trojan PE and it worked fine
 
-tested on windows 10 and 11
+tested on windows 10 and 11 fully bypass windows defender
 
 Setup:
 
