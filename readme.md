@@ -21,6 +21,10 @@ ps: tried this with an AgentTesla trojan PE and it worked fine ;)
 
 tested on windows 10 and 11 fully bypass windows defender
 
+GUI support (game):
+-------------------
+![Alt text](<2024-02-18 12_24_08-Beryl.py - Beryl - Visual Studio Code.png>)
+
 Setup:
 -------------------
 
