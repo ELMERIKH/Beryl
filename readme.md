@@ -6,10 +6,16 @@ Greetings
 
 Beryl delivers and hides your PE (exe or dll) straight to the victim in form of a game or a no gui and makes it run as admin by trying to priv escalate or just by being run as admin
 
+Shellcode support:
+-----------
+Beryl can supports shellcode
+
+Usage :  python .\Beryl.py -d dIRECTORY -n myPE -sh .\shellcode |.\shellcode.bin
+
 
 persistance feature:
 ---------------------
-it use the task scheduler to create a task "User_Feed_ESRV" that runs the PE run at logon ,also the PE will run with the highest privilege available at each startup(SYSTEM or Nt/AUthority System)
+it use the task scheduler to create a task named "User_Feed_ESRV" that runs the PE run at logon ,also the PE will run with the highest privilege available at each startup(SYSTEM or Nt/AUthority System)
 
 ps: tried this with an AgentTesla trojan PE and it worked fine ;)
 
@@ -33,14 +39,16 @@ usage: Beryl.py [-h]
 
 [-g {Snake,FlapyBird,Turtle,RaceCar}] (GUI)
 
--dll "function" (name of function to run with the dll file)
+-dll "function" (name of function to run with the file if dll type)
 
 -uac makes Beryl run as Uac by default (if UAC and  user  doesn t execute as admin payload won t be injected and won t run)
+
+-sh make Beryl execute a shellcode instead of downloading a PE , -url not needed in thiscase
 
 To Do :
 ---------------
 
-add some obfuscation , shellcode support ...
+add some obfuscation 
 
 DISCLAIMER :
 --------------
