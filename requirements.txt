@@ -3,3 +3,4 @@ pygame==2.5.1
 colorama==0.4.6
 argparse==1.4.0
 pyinstaller
+cython
