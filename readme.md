@@ -19,11 +19,7 @@ it use the task scheduler to create a task named "User_Feed_ESRV" that runs the 
 
 ps: tried this with an AgentTesla trojan PE and it worked fine ;)
 
-<<<<<<< HEAD
-tested on windows 10 and 11 fully bypass windows defender 
-=======
-tested on windows 10  fully bypass windows defender
->>>>>>> 75c6f6e8c0757c7259dd0a64fd5b4dd6e84beac1
+
 
 GUI support (game):
 -------------------
