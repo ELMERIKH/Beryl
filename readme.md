@@ -8,7 +8,7 @@ Beryl delivers and hides your PE (exe or dll) straight to the victim in form of 
 
 Shellcode support:
 -----------
-Beryl can supports shellcode
+Beryl supports shellcode
 
 Usage :  python .\Beryl.py -d dIRECTORY -n myPE -sh .\shellcode |.\shellcode.bin
 
